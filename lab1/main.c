@@ -38,7 +38,7 @@ void task2()
     printf("Група КН-1023б\n");
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     task1();
     task2();
