@@ -21,7 +21,7 @@ void task1()
         p = (a + b + c) / 2;
         S = sqrt(p * (p - a) * (p - b) * (p - c));
 
-        printf("Площя трикутника = %5.3f\n", S);
+        printf("Площа трикутника = %5.3f\n", S);
     }
     else
     {
