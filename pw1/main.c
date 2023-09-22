@@ -2,6 +2,9 @@
 #include <stdbool.h>
 #include <math.h>
 
+// Розкоментуйте строку, якщо компілюєте програму на Windows
+// #define IS_WINDOWS
+
 #ifdef IS_WINDOWS
 #include <windows.h>
 #endif
