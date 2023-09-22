@@ -70,7 +70,7 @@ void run_task_manager(struct TaskList *task_list)
     printf("-1 - вийти з програми\n");
     for (int i = 0; i < task_list->count; i++)
     {
-        printf("%d - запустити завдання під номером %d\n", task_list->tasks[i].id);
+        printf("%d - запустити завдання під номером %d\n", task_list->tasks[i].id, task_list->tasks[i].id);
     }
 
     int task_number;
