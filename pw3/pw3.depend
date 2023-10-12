@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1696631372 source:/home/blackgolyb/Documents/KN1023b/semester_1/C_programming/Omelnitskyi/pw3/main.c
+	<stdio.h>
+	<stdbool.h>
+	<math.h>
+	<windows.h>
+
