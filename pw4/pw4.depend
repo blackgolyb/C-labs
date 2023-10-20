@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1697785144 source:/home/blackgolyb/Documents/KN1023b/semester_1/C_programming/Omelnitskyi/pw4/main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<locale.h>
+	<wchar.h>
+
