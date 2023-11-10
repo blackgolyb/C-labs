@@ -25,6 +25,7 @@ dyn_array create_array(int len);
 void resize_array(dyn_array *arr, int len);
 void destroy_array(dyn_array *arr);
 void fill_array_random(dyn_array arr, int start, int stop);
+bool is_array_include(dyn_array *arr, int elem);
 void print_array(dyn_array arr);
 
 typedef void (*log_iteration_type)(dyn_array, dyn_array);

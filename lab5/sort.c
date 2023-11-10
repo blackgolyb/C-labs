@@ -36,6 +36,17 @@ void fill_array_random(dyn_array arr, int start, int stop)
     }
 }
 
+bool is_array_include(dyn_array *arr, int elem)
+{
+    for (int i = 0; i < arr->len; i++)
+    {
+        if (arr->arr[i] == elem)
+            return true;
+    }
+
+    return false;
+}
+
 void print_array(dyn_array arr)
 {
     printf("[");

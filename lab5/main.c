@@ -75,7 +75,33 @@ void task3()
     int len = 10;
     dyn_array arr = create_array(len);
 
-    fill_array_random(arr, -100, 100);
+    for (int i = 0; i < arr.len; i++)
+    {
+        arr.arr[i] = -1;
+    }
+
+    int input_value;
+    for (int i = 0; i < arr.len; i++)
+    {
+        while (true)
+        {
+            printf("i(%d):  ", i);
+            input(&input_value, "елемент масиву в межах [10, 99]");
+            if ((input_value < 10) || (input_value > 99))
+            {
+                printf("Елемент масиву має бути в межах [10, 99]\n");
+                continue;
+            }
+            if (is_array_include(&arr, input_value))
+            {
+                printf("Елемент масиву вже існує\n");
+                continue;
+            }
+            break;
+        }
+
+        arr.arr[i] = input_value;
+    }
 
     printf("Початковий масив:\n");
     print_array(arr);

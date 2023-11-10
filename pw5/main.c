@@ -231,6 +231,10 @@ void print_table(table_t *table)
                 {
                     if (neighbors[0] && neighbors[1])
                         line[c_size] = L' ';
+                    else if (get_cell_neighbors(table, j, i - 1)[1] && neighbors[1])
+                        line[c_size] = L'─';
+                    else if (get_cell_neighbors(table, j + 1, i)[0] && neighbors[0])
+                        line[c_size] = L'│';
                     else if (neighbors[1])
                         line[c_size] = L'┴';
                     else if (neighbors[0])
