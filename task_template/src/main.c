@@ -4,9 +4,9 @@
 #include "task_manager.h"
 #include "tasks.h"
 
-void register_tasks(struct TaskList *task_list, void *(*tasks[])(), char *name_template)
+void register_tasks(struct TaskList *task_list, void *(*tasks[])(), int n, char *name_template)
 {
-    for (int i = 0; i < sizeof(tasks) / sizeof(tasks[0]); ++i)
+    for (int i = 0; i < n; ++i)
     {
         char *formattedString = malloc(sizeof(char) * 20);
         sprintf(formattedString, name_template, i + 1);
@@ -18,7 +18,8 @@ int main()
 {
     struct TaskList task_list = {NULL, 0};
 
-    register_tasks(&task_list, &tasks, "Завдання %d");
+    int n = sizeof(tasks) / sizeof(tasks[0]);
+    register_tasks(&task_list, &tasks, n, "Завдання %d");
 
     run_task_manager(&task_list);
 

@@ -1,5 +1,5 @@
 PROJECT_NAME=res
-BIN_NAME=res
+BIN_NAME=main
 
 all: build
 
@@ -13,4 +13,4 @@ clean:
 run: build
 	echo; echo; echo "---------------$(PROJECT_NAME)---------------"; ./build/$(BIN_NAME)
 
-run_compiled: run
+.PHONY: all build clean run
