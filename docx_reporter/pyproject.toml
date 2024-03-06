@@ -9,6 +9,11 @@ readme = "README.md"
 python = "^3.11"
 docxtpl = "^0.16.8"
 click = "^8.1.7"
+marko = "^2.0.3"
+trogon = "^0.5.0"
+textual = "^0.52.1"
+openai = "^1.13.3"
+g4f = {extras = ["all"], version = "^0.2.2.7"}
 
 
 [build-system]

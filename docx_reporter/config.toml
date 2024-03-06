@@ -1,3 +1,8 @@
-full_name = "Омельніцький А.М"
+[setup]
+student_full_name = "Омельніцький А.М"
 variant = 7
 group = "КН-1023б"
+
+[config]
+api_key = "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"
+ai = "g4f"
