@@ -1,0 +1,4 @@
+include_directories(hash_table)
+add_subdirectory(hash_table)
+include_directories(table)
+add_subdirectory(table)
