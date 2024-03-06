@@ -6,4 +6,4 @@ file(GLOB SOURCE_FILES *.c)
 # include_directories(../libs/hash_table)
 
 add_library(tasks STATIC ${SOURCE_FILES})
-target_link_libraries(tasks PRIVATE hash_table table)
+target_link_libraries(tasks PRIVATE hash_table table utils)

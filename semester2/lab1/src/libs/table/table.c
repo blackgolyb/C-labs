@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "table.h"
 
 Table *create_table(int width, int height)
@@ -331,9 +329,18 @@ wchar_t *int_to_wide_string(int value)
 wchar_t *string_to_wide_string(char *input_string)
 {
     int n = strlen(input_string);
-    
+
     wchar_t *result = malloc(sizeof(wchar_t) * n);
     swprintf(result, n, L"%hs", input_string);
 
     return result;
+}
+
+wchar_t *float_to_wide_string(float input_string)
+{
+    int len = snprintf(NULL, 0, "%f", input_string);
+    char *result = malloc(len + 1);
+    snprintf(result, len + 1, "%f", input_string);
+
+    return string_to_wide_string(result);
 }

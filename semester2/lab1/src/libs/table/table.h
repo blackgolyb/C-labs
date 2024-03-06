@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <wchar.h>
 #include <stdbool.h>
 
@@ -40,5 +41,6 @@ void put_string_aligned(wchar_t *dest, wchar_t *src, int place_size, int place, 
 void print_table(Table *table);
 wchar_t *int_to_wide_string(int value);
 wchar_t *string_to_wide_string(char *input_string);
+wchar_t *float_to_wide_string(float input_string);
 
 #endif // TABLE_H_INCLUDED

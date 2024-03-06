@@ -4,11 +4,7 @@
 
 #include "hash_table.h"
 #include "table.h"
-
-int random_number(int start, int stop)
-{
-    return (rand() % (stop - start + 1)) + start;
-}
+#include "utils.h"
 
 struct Date
 {
@@ -32,19 +28,6 @@ typedef struct Strings
     char **strings;
     size_t n;
 } Strings;
-
-char *generate_name(int len)
-{
-    char *res = malloc(sizeof(char) * (len + 1));
-
-    for (int i = 0; i < len; i++)
-    {
-        res[i] = random_number('a', 'z');
-    }
-    res[len] = '\0';
-
-    return res;
-}
 
 Product generate_product(Strings *countries, Strings *companies, int year_span[2])
 {
