@@ -62,7 +62,10 @@ def main(
             fpath = Path(root) / file
             relpath = os.path.relpath(fpath, source_directory)
 
-            add_code(doc, relpath, fpath.read_text())
+            try:
+                add_code(doc, relpath, fpath.read_text())
+            except UnicodeDecodeError:
+                pass
 
     if not (source_directory / "report").exists():
         os.mkdir(source_directory / "report")
