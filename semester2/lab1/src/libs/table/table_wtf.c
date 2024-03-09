@@ -141,13 +141,198 @@ void put_string_aligned(wchar_t *dest, wchar_t *src, int place_size, int place, 
     }
 }
 
+// void print_table_win(Table *table)
+// {
+// #define PRINT_FUNC(str)\
+//     _setmode(_fileno(stdout), _O_U16TEXT);\
+//     wprintf(L"%ls\n", line);\
+//     _setmode(_fileno(stdout), _O_TEXT)
+
+//     int *column_sizes = malloc(sizeof(int) * table->width);
+//     int line_size = 1;
+
+//     for (int i = 0; i < table->width; i++)
+//     {
+//         column_sizes[i] = max_content_size(table, i);
+//         line_size += column_sizes[i] + 1;
+//     }
+
+//     wchar_t *line = (wchar_t *)malloc(line_size * sizeof(wchar_t));
+
+//     wchar_t delim[] = L"\n";
+//     wchar_t temp[wcslen(table->title) + 1];
+//     wcscpy(temp, table->title);
+
+//     wchar_t *title = wcstok(temp, delim);
+
+//     while (title)
+//     {
+//         put_string_aligned(line, title, line_size, 0, 'c');
+//         PRINT_FUNC(line);
+//         title = wcstok(NULL, delim);
+//     }
+
+//     int c_size;
+//     int i;
+//     for (i = 0; i < table->height; i++)
+//     {
+//         c_size = 0;
+//         for (int j = 0; j < table->width; j++)
+//         {
+//             bool *neighbors = get_cell_neighbors(table, j, i);
+
+//             if (j == 0)
+//             {
+//                 if (i == 0)
+//                 {
+//                     PRINT_FUNC(L'╔');
+//                 }
+//                 else
+//                 {
+//                     PRINT_FUNC((!neighbors[0]) ? L'╟' : L'║');
+//                 }
+//                 c_size++;
+//             }
+
+//             for (int k = 0; k < column_sizes[j]; k++)
+//             {
+//                 if (i == 0)
+//                 {
+//                     PRINT_FUNC(L'═');
+//                 }
+//                 else
+//                 {
+//                     PRINT_FUNC((!neighbors[0]) ? L'─' : L' ');
+//                 }
+
+//                 c_size++;
+//             }
+            
+//             if (j == table->width - 1)
+//             {
+//                 if (i == 0)
+//                 {
+//                     PRINT_FUNC(L'╗');
+//                 }
+//                 else
+//                 {
+//                     PRINT_FUNC((!neighbors[0]) ? L'╢' : L'║');
+//                 }
+//             }
+//             else
+//             {
+//                 if (i == 0)
+//                     line[c_size] = (!neighbors[1]) ? L'╤' : L'═';
+//                 else
+//                 {
+//                     if (neighbors[0] && neighbors[1])
+//                         line[c_size] = L' ';
+//                     else if (get_cell_neighbors(table, j, i - 1)[1] && neighbors[1])
+//                         line[c_size] = L'─';
+//                     else if (get_cell_neighbors(table, j + 1, i)[0] && neighbors[0])
+//                         line[c_size] = L'│';
+//                     else if (neighbors[1])
+//                         line[c_size] = L'┴';
+//                     else if (neighbors[0])
+//                         line[c_size] = L'├';
+//                     else if (get_cell_neighbors(table, j, i - 1)[1])
+//                         line[c_size] = L'┬';
+//                     else if (get_cell_neighbors(table, j + 1, i)[0])
+//                         line[c_size] = L'┤';
+//                     else
+//                         line[c_size] = L'┼';
+//                 }
+//             }
+//             c_size++;
+//         }
+//         PRINT_FUNC(line);
+
+//         c_size = 0;
+//         int grouped = 0;
+//         int grouped_start = 0;
+//         for (int j = 0; j < table->width; j++)
+//         {
+//             bool *neighbors = get_cell_neighbors(table, j, i);
+
+//             if (j == 0)
+//             {
+//                 line[0] = L'║';
+//                 c_size++;
+//             }
+
+//             if (!grouped)
+//                 grouped_start = j;
+
+//             grouped += column_sizes[j];
+
+//             if (neighbors[1])
+//             {
+//                 grouped++;
+//             }
+//             else
+//             {
+//                 line[c_size] = L' ';
+//                 c_size++;
+//                 put_string_aligned(line, table->cells[i][grouped_start].text, grouped - 2, c_size, table->cells[i][grouped_start].h_align);
+//                 c_size += grouped - 2;
+//                 line[c_size] = L' ';
+//                 c_size++;
+//                 line[c_size] = (j == table->width - 1) ? L'║' : L'│';
+//                 c_size++;
+
+//                 grouped = 0;
+//             }
+//         }
+//         PRINT_FUNC(line);
+//     }
+
+//     i = table->height - 1;
+//     c_size = 0;
+//     for (int j = 0; j < table->width; j++)
+//     {
+//         bool *neighbors = get_cell_neighbors(table, j, i);
+
+//         if (j == 0)
+//         {
+//             line[0] = L'╚';
+//             c_size++;
+//         }
+
+//         for (int k = 0; k < column_sizes[j]; k++)
+//         {
+//             line[c_size] = L'═';
+//             c_size++;
+//         }
+//         if (j == table->width - 1)
+//         {
+//             line[line_size - 1] = L'╝';
+//         }
+//         else
+//         {
+//             line[c_size] = (!neighbors[1]) ? L'╧' : L'═';
+//         }
+//         c_size++;
+//     }
+//     PRINT_FUNC(line);
+// }
+
+
+
+
 void print_table(Table *table)
 {
 #ifdef WIN32
-#define PRINT_FUNC(str) wprintf(L"%ls\n", line);
-    _setmode(_fileno(stdout), _O_U16TEXT);
+
+
+#define PRINT_FUNC(str)\
+    _setmode(_fileno(stdout), _O_U16TEXT);\
+    wprintf(L"%ls\n", line);\
+    _setmode(_fileno(stdout), _O_TEXT);
+
 #else
+
 #define PRINT_FUNC(str) printf("%ls\n", line)
+
 #endif
 
     int *column_sizes = malloc(sizeof(int) * table->width);
@@ -313,10 +498,6 @@ void print_table(Table *table)
         c_size++;
     }
     PRINT_FUNC(line);
-
-#ifdef WIN32
-    _setmode(_fileno(stdout), _O_TEXT);
-#endif
 }
 
 wchar_t *int_to_wide_string(int value)
@@ -353,7 +534,45 @@ wchar_t *string_to_wide_string(char *input_string)
 
     wchar_t *result = malloc(sizeof(wchar_t) * (n+1));
     swprintf(result, n+1, L"%hs", input_string);
-    
+
+    // int i = 0;
+    // int c = 0;
+    // for (; i < n; i++)
+    // {
+    //     if (input_string[i] >=0)
+    //     {
+    //         result[c] = input_string[i];
+    //         c++;
+    //         continue;
+    //     }
+
+    //     int char_id = 256 * (256 + input_string[i]) + (256 + input_string[i + 1]);
+    //     printf("%d\n", char_id);
+    //     printf("%d %d\n ", input_string[i], input_string[i+1]);
+    //     if (char_id >= 'а' && char_id <= 'я')
+    //     {
+    //         // printf("%d\n", result[i]);
+    //         result[c] = char_id - 'а' + L'а';
+    //         // printf("%d\n", result[i]);
+    //     }
+    //     else if (char_id >= 'А' && char_id <= 'Я')
+    //     {
+    //         // printf("%d\n", result[i]);
+    //         // printf("%d\n", char_id);
+    //         result[c] = char_id - 'А' + L'А';
+    //     }
+    //     printf("%d\n", result[i]);
+    //     i++;
+    //     c++;
+    // }
+    // printf("c: %d\n", c);
+    // result[c] = L'\0';
+
+    // for (i = 0; i < c+1; i++) {
+    //     printf("res: %d\n", result[i]);
+    // }
+    // printf("res_len: %d\n", wcslen(result));
+
     return result;
 }
 

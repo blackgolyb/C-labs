@@ -53,18 +53,6 @@ Product *generate_products(int n, Strings *countries, Strings *companies, int ye
     return products;
 }
 
-void print_product(Product *product)
-{
-    printf("Product:\n");
-    printf("\tCompany supplier: %s\n", product->company_supplier);
-    printf("\tProduct name: %s\n", product->product_name);
-    printf("\tPrice: %d\n", product->price);
-    printf("\tUnits number: %d\n", product->units_number);
-    printf("\tDate: %d.%d.%d\n", product->date.day, product->date.month, product->date.year);
-    printf("\tState supplier: %s\n", product->state_supplier);
-    printf("\n");
-}
-
 void print_products(Product *products, int n)
 {
     const int ho = 2; /* header offset in table */
