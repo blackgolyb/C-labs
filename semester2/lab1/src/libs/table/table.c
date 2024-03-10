@@ -159,7 +159,8 @@ void print_table(Table *table)
         line_size += column_sizes[i] + 1;
     }
 
-    wchar_t *line = (wchar_t *)malloc(line_size * sizeof(wchar_t));
+    wchar_t *line = (wchar_t *)malloc((line_size + 1) * sizeof(wchar_t));
+    line[line_size] = L'\0';
 
     wchar_t *buffer;
     wchar_t delim[] = L"\n";
@@ -351,9 +352,9 @@ wchar_t *string_to_wide_string(char *input_string)
 {
     int n = strlen(input_string);
 
-    wchar_t *result = malloc(sizeof(wchar_t) * (n+1));
-    swprintf(result, n+1, L"%hs", input_string);
-    
+    wchar_t *result = malloc(sizeof(wchar_t) * (n + 1));
+    swprintf(result, n + 1, L"%hs", input_string);
+
     return result;
 }
 

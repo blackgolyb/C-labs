@@ -143,6 +143,13 @@ void put_string_aligned(wchar_t *dest, wchar_t *src, int place_size, int place, 
 
 void print_table(Table *table)
 {
+#ifdef WIN32
+#define PRINT_FUNC(str) wprintf(L"%ls\n", line);
+    _setmode(_fileno(stdout), _O_U16TEXT);
+#else
+#define PRINT_FUNC(str) printf("%ls\n", line)
+#endif
+
     int *column_sizes = malloc(sizeof(int) * table->width);
     int line_size = 1;
 
@@ -152,19 +159,30 @@ void print_table(Table *table)
         line_size += column_sizes[i] + 1;
     }
 
-    wchar_t *line = (wchar_t *)malloc(line_size * sizeof(wchar_t));
+    wchar_t *line = (wchar_t *)malloc((line_size + 1) * sizeof(wchar_t));
+    line[line_size] = L'\0';
 
     wchar_t *buffer;
     wchar_t delim[] = L"\n";
     wchar_t temp[wcslen(table->title) + 1];
     wcscpy(temp, table->title);
 
+#ifdef WIN32
+    wchar_t *title = wcstok(temp, delim);
+#else
     wchar_t *title = wcstok(temp, delim, &buffer);
+#endif
+
     while (title)
     {
         put_string_aligned(line, title, line_size, 0, 'c');
-        printf("%ls\n", line);
+        PRINT_FUNC(line);
+
+#ifdef WIN32
+        title = wcstok(NULL, delim);
+#else
         title = wcstok(NULL, delim, &buffer);
+#endif
     }
 
     int c_size;
@@ -227,7 +245,7 @@ void print_table(Table *table)
             }
             c_size++;
         }
-        printf("%ls\n", line);
+        PRINT_FUNC(line);
 
         c_size = 0;
         int grouped = 0;
@@ -265,7 +283,7 @@ void print_table(Table *table)
                 grouped = 0;
             }
         }
-        printf("%ls\n", line);
+        PRINT_FUNC(line);
     }
 
     i = table->height - 1;
@@ -295,7 +313,11 @@ void print_table(Table *table)
         }
         c_size++;
     }
-    printf("%ls\n", line);
+    PRINT_FUNC(line);
+
+#ifdef WIN32
+    _setmode(_fileno(stdout), _O_TEXT);
+#endif
 }
 
 wchar_t *int_to_wide_string(int value)
@@ -330,8 +352,8 @@ wchar_t *string_to_wide_string(char *input_string)
 {
     int n = strlen(input_string);
 
-    wchar_t *result = malloc(sizeof(wchar_t) * (n+1));
-    swprintf(result, n+1, L"%hs", input_string);
+    wchar_t *result = malloc(sizeof(wchar_t) * (n + 1));
+    swprintf(result, n + 1, L"%hs", input_string);
 
     return result;
 }

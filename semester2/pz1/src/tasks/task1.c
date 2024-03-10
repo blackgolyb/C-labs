@@ -230,6 +230,8 @@ void app_load_from_file()
     if (input_file == NULL)
     {
         puts("Error opening file");
+        int err;
+        scanf("%d", err);
         exit(-1);
     }
 

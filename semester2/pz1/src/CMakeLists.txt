@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 2.8)
 
 project(main LANGUAGES C)
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static")
+endif()
+
+
 include_directories(task_manager tasks libs/hash_table libs/table libs/linked_list libs/utils)
 
 add_executable(${PROJECT_NAME} main.c)

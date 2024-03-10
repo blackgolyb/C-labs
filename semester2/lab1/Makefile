@@ -17,7 +17,7 @@ clean:
 run: build
 	echo; echo; echo "---------------$(PROJECT_NAME)---------------"; ./build/$(BIN_NAME)
 
-	.SILENT: run_win
+.SILENT: run_win
 run_win: build_win
 	echo; echo; echo "---------------$(PROJECT_NAME)---------------"; ./build/$(BIN_NAME).exe
 
