@@ -146,7 +146,7 @@ Employee *input_employee()
     scanf("%s", employee->office);
     printf("Age: ");
     scanf("%d", &employee->age);
-    printf("Start date: ");
+    printf("Start date (dd.mm.yyyy): ");
     scanf("%d.%d.%d", &employee->start_date.day, &employee->start_date.month, &employee->start_date.year);
 
     return employee;

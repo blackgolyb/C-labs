@@ -39,7 +39,7 @@ void run_tusk(struct TaskList *task_list, int task_number)
     }
 }
 
-void run_task_manager(struct TaskList *task_list)
+void print_help(struct TaskList *task_list)
 {
     printf("Доступні опції:\n");
     printf("%3d -- вийти з програми\n", -1);
@@ -47,11 +47,15 @@ void run_task_manager(struct TaskList *task_list)
     {
         printf("%3d -- %s\n", task_list->tasks[i].id, task_list->tasks[i].title);
     }
+}
 
+void run_task_manager(struct TaskList *task_list)
+{
     int task_number;
 
     while (true)
     {
+        print_help(task_list);
         printf("\n\n");
         printf("Введіть номер опціїї або номер завдання: ");
         scanf("%d", &task_number);

@@ -1,6 +1,7 @@
 *.txt
 !CMakeLists.txt
 *.dat
+codegen.docx
 
 # Prerequisites
 *.d
