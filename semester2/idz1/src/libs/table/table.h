@@ -7,6 +7,13 @@
 #include <wchar.h>
 #include <stdbool.h>
 
+#ifdef WIN32
+
+#include <io.h>
+#include <fcntl.h>
+
+#endif
+
 typedef struct Cell
 {
     char h_align;
