@@ -1,0 +1,4 @@
+include_directories(utils)
+add_subdirectory(utils)
+include_directories(linked_list)
+add_subdirectory(linked_list)
