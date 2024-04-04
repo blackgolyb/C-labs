@@ -12,6 +12,13 @@ void task1_key_callback(GLFWwindow *window, int key, int scancode, int action, i
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+    else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        scene1->origin.x = 0.0f;
+        scene1->origin.y = 0.0f;
+        scene1->scale.x = DEFAULT_SCENE_SCALE;
+        scene1->scale.y = DEFAULT_SCENE_SCALE;
+    }
 }
 
 void task1_scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
@@ -143,9 +150,10 @@ void task1()
     mouse1 = create_mouse();
     scene1 = create_scene(WIDTH, HEIGHT);
     scene1->show_grid = true;
-    // scene_add(scene, function(cosf));
-    scene_add(scene1, function(sinf));
-    // scene_add(scene, function(func));
+    // scene_add(scene1, function(cosf));
+    // scene_add(scene1, function(sinf));
+    scene_add(scene1, function(tanf));
+    // scene_add(scene1, function(func));
 
     while (!glfwWindowShouldClose(window))
     {

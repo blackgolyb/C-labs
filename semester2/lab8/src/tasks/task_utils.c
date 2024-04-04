@@ -6,6 +6,16 @@ ColorRGB color_rgb(float r, float g, float b)
     return res;
 }
 
+ColorRGB color_mix(ColorRGB c1, ColorRGB c2, float t)
+{
+    ColorRGB res = {
+        c1.r + t * (c2.r - c1.r),
+        c1.g + t * (c2.g - c1.g),
+        c1.b + t * (c2.b - c1.b),
+    };
+    return res;
+}
+
 Axis axis(char *name, float angle, ColorRGB color)
 {
     Axis res = {.name = name, .angle = angle, .color = color};
@@ -45,12 +55,15 @@ Scene *create_scene(float width, float height)
     Scene *res = malloc(sizeof(Scene));
     res->functions = da_create(10, 2, sizeof(Function *));
     res->origin = point(0, 0);
-    res->scale = point(10, 10);
+    res->scale = point(DEFAULT_SCENE_SCALE, DEFAULT_SCENE_SCALE);
     res->show_axes = true;
     res->show_grid = false;
     res->width = width;
     res->height = height;
     res->scale_factor = 1.01f;
+    ColorRGB c = {0.8f, 0.8f, 0.8f};
+    // ColorRGB c = {0.5f, 0.5f, 0.5f};
+    res->grid_color = c;
     return res;
 }
 
@@ -68,6 +81,8 @@ void draw_function(Function *function, Scene *scene)
 {
     float xmin = -scene->width / (2.0f * scene->scale.x) - scene->origin.x;
     float xmax = scene->width / (2.0f * scene->scale.x) - scene->origin.x;
+    float ymin = -scene->height / (2.0f * scene->scale.y) - scene->origin.y;
+    float ymax = scene->height / (2.0f * scene->scale.y) - scene->origin.y;
     int n = ceilf((xmax - xmin) / function->discretization);
     float x, y;
 
@@ -77,11 +92,28 @@ void draw_function(Function *function, Scene *scene)
 
     glBegin(GL_LINE_STRIP);
     glColor3f(function->color.r, function->color.g, function->color.b);
+
+    bool skip = false;
     for (int i = 0; i < n; i++)
     {
         x = xmin + function->discretization * i;
         y = function->f(x);
-        glVertex2f(x, y);
+
+        if (y > ymax || y < ymin)
+        {
+            glVertex2f(x, y);
+            skip = true;
+            glEnd();
+        }
+        else if (skip)
+        {
+            skip = false;
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(x - function->discretization, function->f(x - function->discretization));
+        }
+
+        if (!skip)
+            glVertex2f(x, y);
     }
     glEnd();
 }
@@ -121,6 +153,7 @@ void draw_axis(Axis axis, Scene *scene)
     glVertex2f(0.0f, 0.0f);
     glVertex2f(-arrow_size, arrow_size);
     glEnd();
+    glLineWidth(1.0f);
 
     glLoadIdentity();
 }
@@ -140,21 +173,27 @@ void draw_grid(Scene *scene)
     float x, y;
     float xn, yn;
 
+    ColorRGB c;
+    float grid_desc = 5.0f;
+    float grid_size = floorf(log(fmax((ymax - ymin), (xmax - xmin))) / log(grid_desc));
+    float grid_s1 = powf(grid_desc, grid_size - 1);
+    float grid_s2 = powf(grid_desc, grid_size - 2);
+
     glLoadIdentity();
     glScalef(2.0f / scene->width * scene->scale.x, 2.0f / scene->height * scene->scale.y, 1.0f);
     glTranslatef(scene->origin.x, scene->origin.y, 0.0f);
-
-    // float grid_size = log(fmax((ymax - ymin), (xmax - xmin)));
-    float grid_size = fmax((ymax - ymin), (xmax - xmin)) / 10;
+    glLineWidth(1.0f);
 
     glBegin(GL_LINES);
-    glColor3f(0.8f, 0.8f, 0.8f);
+    ColorRGB w = {1.0f, 1.0f, 1.0f};
+    c = color_mix(w, scene->grid_color, 0.3);
+    glColor3f(c.r, c.g, c.b);
     y = 0;
     while (y <= ymax)
     {
         glVertex2f(xmin, y);
         glVertex2f(xmax, y);
-        y += grid_size;
+        y += grid_s2;
     }
 
     y = 0;
@@ -162,7 +201,7 @@ void draw_grid(Scene *scene)
     {
         glVertex2f(xmin, y);
         glVertex2f(xmax, y);
-        y -= grid_size;
+        y -= grid_s2;
     }
 
     x = 0;
@@ -170,7 +209,7 @@ void draw_grid(Scene *scene)
     {
         glVertex2f(x, ymin);
         glVertex2f(x, ymax);
-        x += grid_size;
+        x += grid_s2;
     }
 
     x = 0;
@@ -178,7 +217,41 @@ void draw_grid(Scene *scene)
     {
         glVertex2f(x, ymin);
         glVertex2f(x, ymax);
-        x -= grid_size;
+        x -= grid_s2;
+    }
+
+    c = scene->grid_color;
+    glColor3f(c.r, c.g, c.b);
+    y = 0;
+    while (y <= ymax)
+    {
+        glVertex2f(xmin, y);
+        glVertex2f(xmax, y);
+        y += grid_s1;
+    }
+
+    y = 0;
+    while (y >= ymin)
+    {
+        glVertex2f(xmin, y);
+        glVertex2f(xmax, y);
+        y -= grid_s1;
+    }
+
+    x = 0;
+    while (x <= xmax)
+    {
+        glVertex2f(x, ymin);
+        glVertex2f(x, ymax);
+        x += grid_s1;
+    }
+
+    x = 0;
+    while (x >= xmin)
+    {
+        glVertex2f(x, ymin);
+        glVertex2f(x, ymax);
+        x -= grid_s1;
     }
 
     glEnd();

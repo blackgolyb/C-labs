@@ -31,17 +31,18 @@ void draw_elephant(float x, float y)
     {
         if (i)
         {
-                c.r = 0.5859375f;
-                c.g = 0.6015625f;
-                c.b = 0.64453125f;
+            c.r = 0.5859375f;
+            c.g = 0.6015625f;
+            c.b = 0.64453125f;
         }
-        else{
+        else
+        {
             c.r = 0.0f;
             c.g = 0.0f;
             c.b = 0.0f;
         }
         // body
-        draw_rect(71 + x, 4 + y, 100, 80, c,  i, WIDTH2, HEIGHT2);
+        draw_rect(71 + x, 4 + y, 100, 80, c, i, WIDTH2, HEIGHT2);
 
         // foots
         draw_rect(71 + x, 84 + y, 17, 28, c, i, WIDTH2, HEIGHT2);
@@ -63,7 +64,7 @@ void draw_elephant(float x, float y)
     }
 }
 
-void task2()
+void task3()
 {
     GLFWwindow *window;
 

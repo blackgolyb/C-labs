@@ -16,6 +16,8 @@
 
 #define PI 3.141592654
 
+#define DEFAULT_SCENE_SCALE 20.0f
+
 typedef struct ColorRGB
 {
     float r;
@@ -69,6 +71,7 @@ typedef struct Scene
     DynArray *functions;
     Point origin;
     Point scale;
+    ColorRGB grid_color;
     bool show_axes;
     bool show_grid;
     float width;
@@ -77,7 +80,7 @@ typedef struct Scene
 } Scene;
 
 Scene *create_scene(float width, float height);
-void free_scene(Scene* scene);
+void free_scene(Scene *scene);
 void scene_add(Scene *scene, Function *function);
 void draw_function(Function *function, Scene *scene);
 void draw_axis(Axis axis, Scene *scene);
