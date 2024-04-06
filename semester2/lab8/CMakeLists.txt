@@ -26,7 +26,7 @@ endif()
 # 	message("You're on Windows !")
 # endif()
 
-include_directories(src/libs/dyn_array src/libs/utils)
+include_directories(src/libs/dyn_array src/libs/utils src/libs/bst)
 
 add_executable(${PROJECT_NAME}
 	${MY_HEADER_FILES}
@@ -36,6 +36,7 @@ add_executable(${PROJECT_NAME}
 add_subdirectory(src/tasks)
 add_subdirectory(src/libs/task_manager)
 add_subdirectory(src/libs/dyn_array)
+add_subdirectory(src/libs/bst)
 add_subdirectory(src/libs/utils)
 
 add_definitions(-DGLEW_STATIC)
@@ -54,6 +55,7 @@ target_link_libraries(${PROJECT_NAME}
 	# PRIVATE nuklear
 	PRIVATE task_manager
 	PRIVATE dyn_array
+	PRIVATE bst
 	PRIVATE utils
 	PRIVATE tasks
 )
@@ -63,6 +65,7 @@ target_include_directories(${PROJECT_NAME}
 	PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src
 	PRIVATE src/libs/task_manager
 	PRIVATE src/libs/dyn_array
+	PRIVATE src/libs/bst
 	PRIVATE src/libs/utils
 	PRIVATE src/tasks
 )

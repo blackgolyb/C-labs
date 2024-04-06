@@ -304,6 +304,7 @@ void draw_ellipse(float x, float y, float rw, float rh, ColorRGB color, bool fil
     float cx = x + rw / 2.0f;
     float cy = y + rh / 2.0f;
 
+    glPushMatrix();
     glLoadIdentity();
     glOrtho(0, width, height, 0, 0, 1);
     if (fill)
@@ -323,6 +324,7 @@ void draw_ellipse(float x, float y, float rw, float rh, ColorRGB color, bool fil
     }
 
     glEnd();
+    glPopMatrix();
 }
 
 void draw_rect(float x, float y, float rw, float rh, ColorRGB color, bool fill, int width, int height)
@@ -355,4 +357,438 @@ void draw_diamond(float x, float y, float rw, float rh, ColorRGB color, bool fil
     glVertex2f(x, y + rh / 2.0f);
 
     glEnd();
+}
+
+void draw_line(float x1, float y1, float x2, float y2, ColorRGB color, float size, int width, int height)
+{
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, width, height, 0, 0, 1);
+    glLineWidth(size);
+    glBegin(GL_LINES);
+    glColor3f(color.r, color.g, color.b);
+
+    glVertex2f(x1, y1);
+    glVertex2f(x2, y2);
+
+    glEnd();
+    glLineWidth(1);
+    glPopMatrix();
+}
+
+int ft_text_len(char *text, int size, FT_Face face)
+{
+    FT_Set_Pixel_Sizes(face, 0, size);
+    int len = 0;
+    while (*text != '\0')
+    {
+        FT_Load_Char(face, *text, FT_LOAD_NO_BITMAP);
+        len += face->glyph->advance.x >> 6;
+        text++;
+    }
+    return len;
+}
+
+unsigned char *bitmap_to_rgba(FT_Bitmap bitmap)
+{
+    unsigned char *image = malloc(bitmap.width * bitmap.rows * 3 * sizeof(unsigned char));
+
+    // for (int i = 0; i < bitmap.width; i++)
+    // {
+    //     for (int j = 0; j < bitmap.rows; j++)
+    //     {
+    //         printf("%c", bitmap.buffer[j * bitmap.width + i]? '#' : ' ');
+    //         for (int k = 0; k < 4; k++)
+    //             image[i + j * bitmap.width + k] = bitmap.buffer[j * bitmap.width + i];
+    //     }
+    //     putchar('\n');
+    // }
+    // printf("%d\n", sizeof(unsigned char));
+    for (int i = 0; i < bitmap.rows; i++)
+    {
+        for (int j = 0; j < bitmap.width; j++)
+        {
+            // printf("%c ", bitmap.buffer[i * bitmap.width + j]? '#' : ' ');
+            // printf("%d ", bitmap.buffer[i * bitmap.width + j]);
+            // for (int k = 0; k < 3; k++)
+            //     image[i * bitmap.width + j + k] = 255;
+            // image[i * bitmap.width + j + 3] = bitmap.buffer[i * bitmap.width + j];
+            for (int k = 0; k < 3; k++)
+                image[i * bitmap.width + j + k] = bitmap.buffer[i * bitmap.width + j];
+            // image[i * bitmap.width + j + 3] = bitmap.buffer[i * bitmap.width + j];
+        }
+        // putchar('\n');
+    }
+
+    return image;
+}
+
+void draw_text(char *text, int x, int y, int size, TextAlignment align, DrawTextSettings *settings)
+{
+    if (align == ALIGN_CENTER)
+        x -= ft_text_len(text, size, settings->face) / 2;
+    else if (align == ALIGN_RIGHT)
+        x -= ft_text_len(text, size, settings->face);
+
+    glPushMatrix();
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    FT_Set_Pixel_Sizes(settings->face, 0, size);
+    glLoadIdentity();
+    glOrtho(0, *settings->width, *settings->height, 0, 0, 1);
+
+    FT_GlyphSlot slot = settings->face->glyph;
+
+    for (const char *p = text; *p; p++)
+    {
+        if (FT_Load_Char(settings->face, *p, FT_LOAD_RENDER))
+            continue;
+
+        glRasterPos2i(x + slot->bitmap_left, y + size - slot->bitmap_top);
+        glPixelZoom(1, -1);
+        glDrawPixels(slot->bitmap.width, slot->bitmap.rows, GL_ALPHA, GL_UNSIGNED_BYTE, slot->bitmap.buffer);
+
+        x += slot->advance.x >> 6; // Додавання ширини літери та проміжку між ними
+        y += slot->advance.y >> 6; // Додавання ширини літери та проміжку між ними
+    }
+    glPopMatrix();
+}
+
+void draw_text2(char *text, int x, int y, int size, TextAlignment align, DrawTextSettings *settings)
+{
+    if (align == ALIGN_CENTER)
+        x -= ft_text_len(text, size, settings->face) / 2;
+    else if (align == ALIGN_RIGHT)
+        x -= ft_text_len(text, size, settings->face);
+
+    glPushMatrix();
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    FT_Set_Pixel_Sizes(settings->face, 0, size);
+    // Відображення тексту
+    // glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, *settings->width, *settings->height, 0, 0, 1);
+
+    // glMatrixMode(GL_MODELVIEW);
+    // glColor3f(1.0, 0.0, 0.0); // Білий колір тексту
+
+    // glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // glPixelTransferi(GL_MAP_COLOR, 1); // использоваь карту
+    // const int map_size = 2;
+    // float map[] = {1.0f, 0.0f};             // пусть...
+    // //...все единицы закрашивают в чёрный, а все нули - в белый цвета...
+    // glPixelMapfv(GL_PIXEL_MAP_I_TO_R, map_size, map);
+    // glPixelMapfv(GL_PIXEL_MAP_I_TO_G, map_size, map);
+    // glPixelMapfv(GL_PIXEL_MAP_I_TO_B, map_size, map);
+    // //...и все нули будут прозрачными
+    // map[0] = 0, map[1] = 1;
+    // glPixelMapfv(GL_PIXEL_MAP_I_TO_A, map_size, map);
+
+    FT_GlyphSlot slot = settings->face->glyph;
+
+    for (const char *p = text; *p; p++)
+    {
+        if (FT_Load_Char(settings->face, *p, FT_LOAD_RENDER))
+            continue;
+
+        // printf("c: %c x: %d y: %d\n", *p, x + slot->bitmap_left, y - slot->bitmap_top);
+
+        // glRasterPos2i(x + slot->bitmap_left, y + slot->bitmap.rows - slot->bitmap_top); //
+        glRasterPos2i(x + slot->bitmap_left, y + size - slot->bitmap_top);
+        glPixelZoom(1, -1);
+        glDrawPixels(slot->bitmap.width, slot->bitmap.rows, GL_ALPHA, GL_UNSIGNED_BYTE, slot->bitmap.buffer);
+
+        x += slot->advance.x >> 6; // Додавання ширини літери та проміжку між ними
+        y += slot->advance.y >> 6; // Додавання ширини літери та проміжку між ними
+    }
+    glPopMatrix();
+}
+
+void draw_text1(char *text, int x, int y, int size, DrawTextSettings *settings)
+{
+    FT_Set_Pixel_Sizes(settings->face, 0, 48);
+    // Відображення тексту
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, *settings->width, *settings->height, 0, 0, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glColor3f(1.0, 1.0, 1.0); // Білий колір тексту
+
+    // FT_GlyphSlot slot = settings->face->glyph;
+    FT_GlyphSlot g = settings->face->glyph;
+
+    // for (const char *p = text; *p; p++)
+    // {
+    //     if (FT_Load_Char(settings->face, *p, FT_LOAD_RENDER))
+    //     {
+    //         continue;
+    //     }
+
+    //     // printf("c: %c x: %d y: %d\n", *p, x + slot->bitmap_left, y - slot->bitmap_top);
+
+    //     glRasterPos2i(x + slot->bitmap_left, y - slot->bitmap_top);
+    //     glPixelZoom(1, -1);
+    //     // glDrawPixels(slot->bitmap.width, slot->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, slot->bitmap.buffer);
+    //     glColor3f(1.0f, 0.5f, 0.5f);
+    //     printf("\n");
+    //     for (int i = 0; i < slot->bitmap.rows; i++)
+    //     {
+    //         for (int j = 0; j < slot->bitmap.width; j++)
+    //         {
+    //             char c = slot->bitmap.buffer[i * slot->bitmap.rows + j];
+    //             printf("%d", c);
+    //         }
+    //         printf("\n");
+    //     }
+    //     return;
+    //     glDrawPixels(slot->bitmap.width, slot->bitmap.rows, GL_RGB, GL_UNSIGNED_BYTE, slot->bitmap.buffer);
+
+    //     // x += slot->advance.x >> 6; // Додавання ширини літери та проміжку між ними
+    //     x += slot->advance.x >> 6; // Додавання ширини літери та проміжку між ними
+    // }
+
+    int length = strlen(text);
+    GLuint *textures;
+    textures = (GLuint *)malloc(sizeof(GLuint) * length);
+
+    glGenTextures(length, textures);
+
+    // FreeType glyphs are 1-byte greyscale, so we can't use alignment.
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    int i;
+    for (i = 0; i < length; ++i)
+    {
+        // if (FT_Load_Char(settings->face, *p, FT_LOAD_RENDER))
+        // {
+        //     continue;
+        // }
+        // Render this particular character using FreeType.
+
+        if (FT_Load_Char(settings->face, text[i], FT_LOAD_RENDER))
+            continue;
+
+        // Make the current glyph's texture active.
+
+        glActiveTexture(textures[i]);
+        glEnable(GL_TEXTURE_2D);
+
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+
+        /*
+         * To prevent artifacts when a character is not rendered exactly on
+         * pixel boundaries, clamp the texture to edges, and enable linear
+         * interpolation.
+         */
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+        // Load the texture.
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, g->bitmap.width,
+                     g->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE,
+                     g->bitmap.buffer);
+
+        // Render the texture on the screen.
+
+        glBegin(GL_TRIANGLE_STRIP);
+
+        glTexCoord2i(0, 0);
+        glVertex2i(x + 0, y + 0);
+
+        glTexCoord2i(g->bitmap.width, 0);
+        glVertex2i(x + g->bitmap.width, y + 0);
+
+        glTexCoord2i(0, g->bitmap.rows);
+        glVertex2i(x + 0, y + g->bitmap.rows);
+
+        glTexCoord2i(g->bitmap.width, 0);
+        glVertex2i(x + g->bitmap.width, y + 0);
+
+        glTexCoord2i(g->bitmap.width, g->bitmap.rows);
+        glVertex2i(x + g->bitmap.width, y + g->bitmap.rows);
+
+        glTexCoord2i(0, g->bitmap.rows);
+        glVertex2i(x + 0, y + g->bitmap.rows);
+
+        glEnd();
+    }
+
+    glDeleteTextures(length, textures);
+    free(textures);
+}
+
+int render_text(const char *t, int x, int y, FT_Face f)
+{
+    int ret = 0;
+
+    GLuint *textures;
+
+    size_t i;
+    size_t length = strlen(t);
+
+    FT_GlyphSlot g = f->glyph;
+
+    // Allocate a texture for each character.
+
+    textures = (GLuint *)malloc(sizeof(GLuint) * length);
+
+    if (textures == NULL)
+    {
+        ret = -ENOMEM;
+        goto done;
+    }
+
+    glGenTextures(length, textures);
+
+    // FreeType glyphs are 1-byte greyscale, so we can't use alignment.
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    // Render each character...
+
+    for (i = 0; i < length; ++i)
+    {
+        // Render this particular character using FreeType.
+
+        if (FT_Load_Char(f, t[i], FT_LOAD_RENDER))
+            continue;
+
+        // Make the current glyph's texture active.
+
+        glActiveTexture(textures[i]);
+        glEnable(GL_TEXTURE_2D);
+
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+
+        /*
+         * To prevent artifacts when a character is not rendered exactly on
+         * pixel boundaries, clamp the texture to edges, and enable linear
+         * interpolation.
+         */
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+        // Load the texture.
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, g->bitmap.width,
+                     g->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE,
+                     g->bitmap.buffer);
+
+        // Render the texture on the screen.
+
+        glBegin(GL_TRIANGLE_STRIP);
+
+        glTexCoord2i(0, 0);
+        glVertex2i(x + 0, y + 0);
+
+        glTexCoord2i(g->bitmap.width, 0);
+        glVertex2i(x + g->bitmap.width, y + 0);
+
+        glTexCoord2i(0, g->bitmap.rows);
+        glVertex2i(x + 0, y + g->bitmap.rows);
+
+        glTexCoord2i(g->bitmap.width, 0);
+        glVertex2i(x + g->bitmap.width, y + 0);
+
+        glTexCoord2i(g->bitmap.width, g->bitmap.rows);
+        glVertex2i(x + g->bitmap.width, y + g->bitmap.rows);
+
+        glTexCoord2i(0, g->bitmap.rows);
+        glVertex2i(x + 0, y + g->bitmap.rows);
+
+        glEnd();
+    }
+
+    // Free our textures and we're done.
+
+    glDeleteTextures(length, textures);
+    free(textures);
+done:
+    return ret;
+}
+
+GLHighlightPair gl_highlight_pair(void *data, ColorRGB color)
+{
+    GLHighlightPair h = {
+        .data = data,
+        .color = color,
+        .text = "",
+    };
+
+    return h;
+}
+
+void __bst__draw_bst(BST *tree, BSTNode *node, float x, float y, float width, float height, int lvl, float lvl_dy, int w, int h, FT_Face face, GLHighlightPair *elems, int en)
+{
+    if (!node)
+        return;
+
+    float s = 50;
+    // ColorRGB c = {1.0f, 1.0f, 0.0f};
+    ColorRGB c = {0.0f, 0.0f, 0.0f};
+    ColorRGB cn = {1.0f, 1.0f, 1.0f};
+
+    DrawTextSettings st = {
+        .face = face,
+        .width = &w,
+        .height = &h,
+    };
+
+    if (node->left)
+        draw_line(x, y + lvl_dy * lvl + s / 2, x - width / 4, y + lvl_dy * (lvl + 1) + s / 2, c, 4, w, h);
+    if (node->right)
+        draw_line(x, y + lvl_dy * lvl + s / 2, x + width / 4, y + lvl_dy * (lvl + 1) + s / 2, c, 4, w, h);
+
+    for (int i = 0; i < en; i++)
+    {
+        if (tree->cmp(elems[i].data, node->data) == 0)
+        {
+            int l = ft_text_len(elems[i].text, s / 2, face);
+            cn = elems[i].color;
+            draw_text(elems[i].text, x, y + lvl_dy * lvl + s * (5 / 4), s / 2, ALIGN_CENTER, &st);
+            break;
+        }
+    }
+
+    draw_ellipse(x - s / 2, y + lvl_dy * lvl, s, s, cn, true, w, h);
+    glLineWidth(2);
+    draw_ellipse(x - s / 2, y + lvl_dy * lvl, s, s, c, false, w, h);
+    glLineWidth(1);
+    char *text = int_to_string(*(int *)node->data);
+    draw_text(text, x, y + lvl_dy * lvl + s / 4, s / 2, ALIGN_CENTER, &st);
+    // draw_text(text, x, y + lvl_dy * lvl + s / 4, s / 2, &st);
+    free(text);
+
+    __bst__draw_bst(tree, node->right, x + width / 4, y, width / 2, height / 2, lvl + 1, lvl_dy, w, h, face, elems, en);
+    __bst__draw_bst(tree, node->left, x - width / 4, y, width / 2, height / 2, lvl + 1, lvl_dy, w, h, face, elems, en);
+}
+
+void draw_bst(BST *tree, float x, float y, float width, float height, int w, int h, FT_Face face)
+{
+    float lvl_dy = height / bst_depth(tree);
+    __bst__draw_bst(tree, tree->root, x + width / 2, y, width, height, 0, lvl_dy, w, h, face, NULL, 0);
+}
+
+void draw_bst_with_highlights(BST *tree, float x, float y, float width, float height, int w, int h, FT_Face face, GLHighlightPair *elems, int en)
+{
+    float lvl_dy = height / bst_depth(tree);
+    __bst__draw_bst(tree, tree->root, x + width / 2, y, width, height, 0, lvl_dy, w, h, face, elems, en);
 }

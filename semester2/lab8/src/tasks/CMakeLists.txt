@@ -12,5 +12,6 @@ target_link_libraries(tasks
     PRIVATE glm
     PRIVATE freetype
     PRIVATE dyn_array
+    PRIVATE bst
     PRIVATE utils
 )
