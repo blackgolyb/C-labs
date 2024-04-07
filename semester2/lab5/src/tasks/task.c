@@ -8,10 +8,12 @@
 #include "linked_list_utils.h"
 #include "utils.h"
 
-bool task1_cmp(void *a, void *b)
+int int_cmp(void *a, void *b)
 {
-    // printf("a = %d b = %d\n", *(int *)a, *(int *)b);
-    return *(int *)a < *(int *)b;
+    if (*(int *)a == *(int *)b)
+        return 0;
+
+    return *(int *)a > *(int *)b ? 1 : -1;
 }
 
 void task1()
@@ -28,10 +30,10 @@ void task1()
     ll_insert(l, 0, &t);
     ll_print(l, "int", " ", "\n");
 
-    ll_bubble_sort(l, task1_cmp);
+    ll_bubble_sort(l, int_cmp, true);
     ll_print(l, "int", " ", "\n");
 
-    ll_quick_sort(l, task1_cmp);
+    ll_quick_sort(l, int_cmp, false);
     ll_print(l, "int", " ", "\n");
 
 }
