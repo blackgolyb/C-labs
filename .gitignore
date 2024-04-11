@@ -2,6 +2,7 @@
 !CMakeLists.txt
 *.dat
 codegen.docx
+poetry.lock
 
 # Prerequisites
 *.d

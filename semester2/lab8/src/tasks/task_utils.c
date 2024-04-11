@@ -90,6 +90,7 @@ void draw_function(Function *function, Scene *scene)
     glScalef(2.0f / scene->width * scene->scale.x, 2.0f / scene->height * scene->scale.y, 1.0f);
     glTranslatef(scene->origin.x, scene->origin.y, 0.0f);
 
+    glLineWidth(2.0f);
     glBegin(GL_LINE_STRIP);
     glColor3f(function->color.r, function->color.g, function->color.b);
 
@@ -116,6 +117,7 @@ void draw_function(Function *function, Scene *scene)
             glVertex2f(x, y);
     }
     glEnd();
+    glLineWidth(1.0f);
 }
 
 void draw_axis(Axis axis, Scene *scene)

@@ -96,11 +96,16 @@ void task2()
     for (int i = 0; i < sizeof(data) / sizeof(data[0]); i++)
         bst_insert(tree, &data[i]);
 
+    // bst_delete(tree, &delete[0]);
+    // bst_delete(tree, &delete[1]);
+    // bst_delete(tree, &delete[2]);
+
     bst_print(tree, "int", true);
 
     int min = *(int *)bst_min(tree);
     int max = *(int *)bst_max(tree);
 
+    int hn = 6;
     GLHighlightPair highlights[6];
     highlights[0] = gl_highlight_pair(&min, color_rgb(0.4f, 0.4f, 1.0f));
     highlights[0].text = "min";
@@ -121,7 +126,7 @@ void task2()
         glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        draw_bst_with_highlights(tree, padding, padding, WIDTH2-padding, HEIGHT2-padding, WIDTH2, HEIGHT2, face, highlights, 6);
+        draw_bst_with_highlights(tree, padding, padding, WIDTH2-padding, HEIGHT2-padding, WIDTH2, HEIGHT2, face, highlights, hn);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

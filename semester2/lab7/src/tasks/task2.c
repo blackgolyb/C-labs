@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 // Визначення константи
-#define DEBUG_MODE
-#define VERBOSE_DEBUG
+// #define DEBUG_MODE
+// #define VERBOSE_DEBUG
 #define VERSION "1.0.0"
 #define AUTHOR "Омельніцький А.М."
 #define GROUP "КН-1023б"

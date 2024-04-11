@@ -30,9 +30,11 @@ void task1()
     srand(SEED);
 
     ll_fill_int_random(l, k, a, b);
+    puts("До сортування:");
     ll_print(l, "int", " ", "\n");
 
     ll_bubble_sort(l, int_cmp, ascending);
+    puts("Після сортування:");
     ll_print(l, "int", " ", "\n");
     ll_destroy(l);
 }
@@ -48,9 +50,11 @@ void task2()
     srand(SEED);
 
     ll_fill_int_random(l, k, a, b);
+    puts("До сортування:");
     ll_print(l, "int", " ", "\n");
 
     ll_quick_sort(l, int_cmp, ascending);
+    puts("Після сортування:");
     ll_print(l, "int", " ", "\n");
     ll_destroy(l);
 }
@@ -66,9 +70,11 @@ void task3()
     srand(SEED);
 
     ll_fill_int_random(l, k, a, b);
+    puts("До сортування:");
     ll_print(l, "int", " ", "\n");
 
     ll_marge_sort(l, int_cmp, ascending);
+    puts("Після сортування:");
     ll_print(l, "int", " ", "\n");
     ll_destroy(l);
 }

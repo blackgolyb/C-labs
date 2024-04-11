@@ -152,8 +152,8 @@ void task1()
     scene1->show_grid = true;
     // scene_add(scene1, function(cosf));
     // scene_add(scene1, function(sinf));
-    scene_add(scene1, function(tanf));
-    // scene_add(scene1, function(func));
+    // scene_add(scene1, function(tanf));
+    scene_add(scene1, function(func));
 
     while (!glfwWindowShouldClose(window))
     {

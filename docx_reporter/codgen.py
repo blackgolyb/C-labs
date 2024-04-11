@@ -38,6 +38,7 @@ def main(
 
     ignore = [
         "report",
+        "lib",
         "build",
     ]
 

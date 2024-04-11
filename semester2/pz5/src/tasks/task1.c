@@ -31,12 +31,19 @@ void print_astacks(AStack **stacks, int n)
         for (int j = 0; j < n; j++)
         {
             if ((deltas[j] - i) <= 0)
-                printf("%5d    ", *(int *)astack_pop(tmp_stacks[j]));
+                printf("    %6d", *(int *)astack_pop(tmp_stacks[j]));
             else
-                printf("         ");
+                printf("          ");
         }
         putchar('\n');
     }
+    for (int j = 0; j < n+1; j++)
+        printf("==========");
+    putchar('\n');
+    // printf("  ");
+    for (int j = 0; j < n; j++)
+        printf("    stack%d", j+1);
+    putchar('\n');
 
     for (int i = 0; i < n; i++)
         astack_destroy(tmp_stacks[i]);

@@ -30,12 +30,19 @@ void print_lstacks(LStack **stacks, int n)
         for (int j = 0; j < n; j++)
         {
             if ((deltas[j] - i) <= 0)
-                printf("%5d    ", *(int *)lstack_pop(tmp_stacks[j]));
+                printf("    %6d", *(int *)lstack_pop(tmp_stacks[j]));
             else
-                printf("         ");
+                printf("          ");
         }
         putchar('\n');
     }
+    for (int j = 0; j < n+1; j++)
+        printf("==========");
+    putchar('\n');
+    // printf("  ");
+    for (int j = 0; j < n; j++)
+        printf("    stack%d", j+1);
+    putchar('\n');
 
     for (int i = 0; i < n; i++)
         lstack_destroy(tmp_stacks[i]);
@@ -61,11 +68,21 @@ void task2()
         queue_insert(q, num);
     }
 
+//     26
+// ============================================
+// ВМІСТ ЧЕРГИ
+// ============================================
+// 45 11 22 90 53 87 14 36 72 41 22 30 46 23
+
+    puts("===========================================================");
+    puts("ВМІСТ ЧЕРГИ");
+    puts("===========================================================");
     Queue *tmp = queue_create();
     queue_copy(tmp, q);
     while (!queue_is_empty(tmp))
         printf("%d ", *(int *)queue_remove(tmp));
     putchar('\n');
+    puts("===========================================================");
 
     while (!queue_is_empty(q))
     {

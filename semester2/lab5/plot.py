@@ -19,6 +19,8 @@ def main():
     plt.plot(iterations, times[0], label="bubble sort")
     plt.plot(iterations, times[1], label="quick sort")
     plt.plot(iterations, times[2], label="marge sort")
+    plt.xlabel("number of elements")
+    plt.ylabel("seconds")
     plt.legend()
     plt.show()
     
