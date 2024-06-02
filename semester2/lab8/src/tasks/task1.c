@@ -121,14 +121,14 @@ void task1()
     if (!glfwInit())
     {
         fprintf(stderr, "Failed to initialize GLFW\n");
-        return -1;
+        return;
     }
 
     window = glfwCreateWindow(WIDTH, HEIGHT, "lab 8 task 1", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
-        return -1;
+        return;
     }
 
     glfwMakeContextCurrent(window);
@@ -141,7 +141,7 @@ void task1()
     if (err != GLEW_OK)
     {
         fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
-        return -1;
+        return;
     }
 
     glfwSetFramebufferSizeCallback(window, task1_framebuffer_size_callback);

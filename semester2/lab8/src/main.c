@@ -24,7 +24,7 @@ void init_code_page()
 #endif
 }
 
-void register_tasks(struct TaskList *task_list, void *(*tasks[])(), int n, char *name_template)
+void register_tasks(struct TaskList *task_list, void (**tasks)(), int n, char *name_template)
 {
     for (int i = 0; i < n; ++i)
     {
@@ -41,7 +41,7 @@ int main()
     struct TaskList task_list = {NULL, 0};
 
     int n = sizeof(tasks) / sizeof(tasks[0]);
-    register_tasks(&task_list, &tasks, n, "Завдання %d");
+    register_tasks(&task_list, tasks, n, "Завдання %d");
 
     run_task_manager(&task_list);
 

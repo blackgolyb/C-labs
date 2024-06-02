@@ -73,14 +73,14 @@ void task3()
     if (!glfwInit())
     {
         fprintf(stderr, "Failed to initialize GLFW\n");
-        return -1;
+        return;
     }
 
     window = glfwCreateWindow(WIDTH3, HEIGHT3, "lab 8 task 1", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
-        return -1;
+        return;
     }
 
     glfwMakeContextCurrent(window);
@@ -90,7 +90,7 @@ void task3()
     if (err != GLEW_OK)
     {
         fprintf(stderr, "Failed to initialize GLEW: %s\n", glewGetErrorString(err));
-        return -1;
+        return;
     }
 
     glfwSetFramebufferSizeCallback(window, task3_framebuffer_size_callback);
@@ -102,7 +102,7 @@ void task3()
     if (FT_Init_FreeType(&ft))
     {
         fprintf(stderr, "Failed to initialize FreeType\n");
-        return -1;
+        return;
     }
 
     // Завантаження шрифта
@@ -110,7 +110,7 @@ void task3()
     if (FT_New_Face(ft, "assets/JetBrainsMonoNerdFontMono-Regular.ttf", 0, &face))
     {
         fprintf(stderr, "Failed to load font\n");
-        return -1;
+        return;
     }
 
     // Встановлення режиму відображення тексту
